@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TrackMyBus | Tri-Code Connect</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 15px 0 5px 0;
+      color: #333;
+    }
+
+    p {
+      text-align: center;
+      margin: 0;
+      color: #555;
+    }
+
+    #map {
+      height: 70vh;   /* Map height */
+      width: 100%;
+      background: #eaeaea;
+    }
+
+    #seatBox {
+      text-align: center;
+      font-size: 20px;
+      padding: 12px;
+      background: #ffeb3b;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 10px auto;
+      width: fit-content;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      padding: 8px;
+      background: #fafafa;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>TrackMyBus</h1>
+  <p>by Team <strong>Tri-Code Connect</strong></p>
+
+  <div id="map"></div>
+
+  <div id="seatBox">
+    Seats Available: <span id="seats">12</span>
+  </div>
+
+  <footer>
+    © Team <strong>Tri-Code Connect</strong>
+  </footer>
+
+  <!-- 🔴 GOOGLE MAPS API (ADD YOUR REAL API KEY) -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_REAL_API_KEY&callback=initMap"
+    async
+    defer>
+  </script>
+
+  <script>
+    let map;
+    let busMarker;
+    let seatsAvailable = 12;
+
+    function initMap() {
+      const busLocation = { lat: 26.9124, lng: 75.7873 }; // Jaipur demo
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: busLocation,
+      });
+
+      busMarker = new google.maps.Marker({
+        position: busLocation,
+        map: map,
+        title: "Live Bus Location",
+      });
+
+      // Simulate seat updates
+      setInterval(() => {
+        if (seatsAvailable > 0) {
+          seatsAvailable--;
+          document.getElementById("seats").innerText = seatsAvailable;
+        }
+      }, 5000);
+
+      // Simulate bus movement
+      setInterval(moveBus, 3000);
+    }
+
+    function moveBus() {
+      const newLat = busMarker.getPosition().lat() + 0.001;
+      const newLng = busMarker.getPosition().lng() + 0.001;
+      const newPosition = { lat: newLat, lng: newLng };
+      busMarker.setPosition(newPosition);
+      map.setCenter(newPosition);
+    }
+  </script>
+
+</body>
+</html>
